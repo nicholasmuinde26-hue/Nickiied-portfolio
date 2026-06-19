@@ -1,0 +1,487 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #7cf03d, #00d4ff);
+  box-shadow: 0 0 15px rgba(124, 240, 61, 0.7);
+  z-index: 9999;
+  transition: width 0.1s ease;
+}
+/* Smooth scroll for all anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset for fixed navbar so section titles don't hide behind it */
+section {
+  scroll-margin-top: 100px;
+}
+body{
+    background: #0a0a0a;
+    color: white;
+}
+.nav-bar{
+    display: flex;
+    padding: 20px 60px;
+     justify-content: space-between;
+     align-items: center;
+     width: 100%;
+     padding: 25px 9%;
+     background: rgba(10, 10, 10, 0.8);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     border-bottom: 1px solid rgba(124, 240, 60, 0.1);
+     position: fixed;
+     top: 0;
+     left: 0;
+     z-index: 100;
+}
+.logo{
+    font-size: 2.5rem;
+    cursor: pointer;
+    background: linear-gradient(90deg, #7cf03d, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+
+}
+
+.nav-links{
+    display: flex;
+    gap: 35px;
+ list-style: none;
+   
+    
+
+}
+.nav-bar a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #7cf03d;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-bar a:hover {
+   color: #7cf03d;
+}
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+   padding: 120px 9% 60px;
+    background: radial-gradient(circle at 20% 50%, rgba(124, 240, 61, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+              #0a0a0a;
+
+
+}
+
+.home-info { flex: 1; max-width: 650px; }
+
+
+.home-info h2 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem) ;
+  display: inline-block;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  min-height: 1.5rem;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Your animation code - fixed for React */
+.home-info h2 span {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  top: 0;
+  white-space: nowrap;
+  -webkit-text-stroke: 0.7px #7cf03d;
+  animation: display-text 16s linear infinite;
+  animation-delay: calc(-4s * var(--i));
+}
+
+@keyframes display-text {
+ 25%, 100% {
+    display: none;
+  }
+}
+
+.home-info h2 span::before {
+  content: attr(data-text);
+  position: absolute;
+  width: 0;
+  
+  color: #7cf03d;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: fill-text 4s linear infinite;
+
+}
+
+.home-info h2 span::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #7cf03d;
+  text-shadow: 0 0 10px rgba(124, 240, 61, 0.7);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+ 50% { opacity: 0; }
+}
+
+@keyframes fill-text {
+ 10%, 100% {
+    width: 0;
+  }
+ 70%, 90% {
+    width: 100%;
+  }
+}
+
+.home-info p {
+  font-size: 1.1rem;
+  color: #aaa;
+  margin: 20px 0 30px;
+  line-height: 1.6;
+  max-width: 603px;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+
+/* Button */
+.cta-btn {
+  display: inline-block;
+  padding: 14px 35px;
+  color: #0a0a0a;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 40px;
+   background: linear-gradient(90deg, #7cf03d 0%, #00d4ff 100%);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0px 25px rgba(124, 240, 61, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+}
+
+.cta-btn:hover {
+   transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(124, 240, 61, 0.5);
+}
+
+/* Container - handles float animation */
+.hero-img {
+  position: relative;
+  flex: 0 0 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: float 4s ease-in-out infinite;
+  
+}
+
+/* Your rotating border logic on img-box */
+.hero-img .img-box {
+ position: relative;
+    width: 100%;
+    height: 320px;
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+     transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease;
+    
+}
+.hero-img .img-box:hover {
+  transform: rotateY(10deg) rotateX(6deg) scale(1.12);
+  transition: 1s;
+}
+
+
+.hero-img .img-box::before,
+.hero-img .img-box::after {
+   content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: conic-gradient(#7cf03d, transparent 20%, transparent 80%, #7cf03d);
+    transform: rotate(0deg);
+    animation: rotate-border 10s linear infinite;
+  filter: blur(20px);
+  opacity: 0.8;
+  
+}
+
+
+.hero-img .img-box::after {
+  animation-delay: -5s;
+}
+
+@keyframes rotate-border {
+ 100% { 
+    transform: rotate(360deg);
+  }
+}
+
+/* Inner circle holding the photo */
+.hero-img .img-box .img-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #0a0a0a;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  z-index: 1; 
+  border: 1px solid #0c0505;
+  overflow: hidden;
+
+}
+
+.hero-img .img-box .img-item img {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+/* Float animation */
+@keyframes float {
+ 0%, 100% { transform: translateY(0px); }
+ 50% { transform: translateY(-12px); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 25px 30px;
+    gap: 40px;
+    
+  }
+  .hero-img {
+    flex: 0 0 240px;
+  }
+  .hero-img .img-box {
+    height: 240px;
+    width: 240px;
+  }
+}
+@media (max-width: 576px) {
+  .hero-img {
+    flex: 0 0 100px;
+  }
+  .hero-img .img-box {
+    height: 180px;
+    width: 180px;
+    padding: 4px;
+  }
+}
+
+
+/* 1. SECTION WRAPPER */
+.projects {
+  min-height: 100vh;
+  padding: 100px 9% 60px;
+  background: radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+              #0a0a0a;
+}
+
+.heading {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.heading span {
+  background: linear-gradient(90deg, #7cf03d, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 2. GRID LAYOUT */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+height: auto;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 3. GLASS CARD - BASE */
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 240, 61, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  
+  /* Fade-in setup */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 4. CARD HOVER EFFECTS */
+.project-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: #7cf03d;
+  box-shadow: 0 20px 50px rgba(124, 240, 61, 0.4);
+}
+
+/* 5. FADE-IN ACTIVE STATE */
+.project-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 6. STAGGER DELAY */
+.project-card:nth-child(1) { transition-delay: 0.1s; }
+.project-card:nth-child(2) { transition-delay: 0.2s; }
+.project-card:nth-child(3) { transition-delay: 0.3s; }
+.project-card:nth-child(4) { transition-delay: 0.4s; }
+.project-card:nth-child(5) { transition-delay: 0.5s; }
+.project-card:nth-child(6) { transition-delay: 0.6s; }
+
+/* 7. IMAGE */
+.project-img {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.project-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-img img {
+  transform: scale(1.1);
+}
+
+/* 8. CONTENT */
+.project-content {
+  padding: 25px;
+}
+
+.project-content h3 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.project-content p {
+  color: #aaa;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* 9. TECH TAGS */
+.tech-stack {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.tech-stack span {
+  padding: 4px 12px;
+  background: rgba(124, 240, 61, 0.1);
+  border: 1px solid rgba(124, 240, 61, 0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #7cf03d;
+}
+
+/* 10. LINKS */
+.project-links {
+  display: flex;
+  gap: 15px;
+}
+
+.project-links a {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #7cf03d, #00d4ff);
+  border-radius: 8px;
+  color: #0a0a0a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.project-links a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(124, 240, 61, 0.5);
+}
+
+/* 11. MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .projects {
+    padding: 80px 5% 40px;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
