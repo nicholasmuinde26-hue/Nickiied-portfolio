@@ -80,7 +80,7 @@ function NickiiedPortfolio() {
   <h2 className="heading">About <span>Me</span></h2>
   <h3>Backend Developer & Security Enthusiast</h3>
   <p>
-    I'm a fullstack developer from Vihiga, KE with a passion for building secure, 
+    I'm a fullstack developer from Machakos, KE with a passion for building secure, 
     scalable web apps. I blend clean backend architecture with bold frontend design. 
     <br /><br />
     When I’m not coding, I’m exploring cybersecurity challenges, experimenting with AI, 
