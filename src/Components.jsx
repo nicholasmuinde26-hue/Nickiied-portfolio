@@ -10,20 +10,33 @@ import projPorfolio6 from './assets/projPorfolio6.jpg'
 
 
 function NickiiedPortfolio() {
- 
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <nav className="nav-bar">
         <h1 className="logo">Nickiied</h1>
-        <ul className="nav-links">
         
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About Me</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
+
+<button className={`hamburger ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+
+
+        <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+          <li><a href="#home" onClick={() => setIsOpen(false)}>Home</a></li>
+          <li><a href="#about" onClick={() => setIsOpen(false)}>About Me</a></li>
+          <li><a href="#projects" onClick={() => setIsOpen(false)}>Projects</a></li>
+          <li><a href="#contact" onClick={() => setIsOpen(false)}>Contact</a></li>
         </ul>
+         {isOpen && <div className="overlay" onClick={() => setIsOpen(false)}></div>}
+         
       </nav>
+      
+    
 
       <section id="home" className="hero" >
       <div className="home-info">
