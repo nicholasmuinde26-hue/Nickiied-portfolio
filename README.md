@@ -1,21 +1,35 @@
-<<<<<<< HEAD
-# React + Vite
+# Nickiied Portfolio 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, animated portfolio website built with React. Features cyberpunk glassmorphism UI, particle backgrounds, scroll animations, and a floating chat widget.
 
-Currently, two official plugins are available:
+**Live Demo:** [your-demo-link.com]  
+**Portfolio:** Showcases projects in Fullstack Dev, Cybersecurity, AI, and Web Apps
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### ✨ Features
 
-## React Compiler
+- **Animated Hero Section** - Typewriter role switcher: Frontend Dev → Security Specialist → Backend Dev → Fullstack Dev
+- **Particle Background** - Interactive tsparticles.js effect behind hero section
+- **Scroll Animations** - Intersection Observer for fade/slide-in effects on project cards + icons
+- **Project Showcase** - Grid layout with hover glow effects for SecureChat, AI Scanner, Tic-Tac-Toe, RSVP Form, OWASP Scanner
+- **Skills & Tools** - Animated progress bars + tech stack grid
+- **Floating Chat Widget** - WhatsApp button + greeting bubble with quick replies
+- **Responsive Design** - Mobile-first, works on all screen sizes
+- **Glassmorphism UI** - Frosted glass cards with neon green/cyan accents
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+**Frontend:** React, Vite, CSS3, Boxicons  
+**Animations:** IntersectionObserver API, CSS Keyframes  
+**Particles:** tsparticles + react-tsparticles + tsparticles-slim  
+**Styling:** Custom CSS with CSS Variables
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Nickiied-portfolio
-Cyberpunk Portfolio | React + Particles.js + Glassmorphism UI | Fullstack Developer &amp; Security Enthusiast
->>>>>>> 151b60e904192ee9a7d904c1605c9e64d5e5d4ac
+### 📸 Preview
+
+![Portfolio Preview](/screenshot.png)
+
+### 🚀 Getting Started
+
+1. Clone the repo:
+```bash
+git clone https://github.com/yourusername/nickiied-portfolio.git
+cd nickiied-portfolio
