@@ -188,19 +188,7 @@
 }
 
 /* Mobile */
-@media (max-width: 768px) {
-  .social-icons {
-    gap: 15px;
-    margin-top: 20px;
-    justify-content: center;
-  }
-  
-  .social-icons a {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-}
+
 /* Back to top button */
 .back-to-top {
   width: 45px;
@@ -224,12 +212,19 @@
 /* Mobile */
 @media (max-width: 768px) {
   .footer {
-    padding: 25px 5%;
+ 
+   align-content: center;
+  
   }
   
   .footer-content {
     flex-direction: column;
     text-align: center;
+    
+      margin-right:  6rem;
+  
+  
+  
   }
   
   .social-icons a,
@@ -237,6 +232,12 @@
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+    align-content: center;
+     
+  
+
+  
+  
   }
 }
 
