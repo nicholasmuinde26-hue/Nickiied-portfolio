@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+
+# env
+.env
+
+# builds
+dist/
+build/
+
+# uploads
+backend/uploads/
