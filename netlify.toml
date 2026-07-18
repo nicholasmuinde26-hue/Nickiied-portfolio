@@ -1,0 +1,7 @@
+[build]
+  base = "nickiied-frontend"
+  command = "npm run build"
+  publish = "nickiied-frontend/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
