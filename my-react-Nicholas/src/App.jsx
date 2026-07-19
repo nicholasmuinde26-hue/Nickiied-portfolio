@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import NickiiedPortfolio from './NickiiedPortfolio'
 import Admin from './Admin'
 import './App.css'
@@ -21,7 +21,7 @@ function Portfolio() {
     const fetchData = async () => {
       try {
         const [contentRes, projectsRes] = await Promise.all([
-          axios.get(`${API}/api/content`).catch(() => ({data: {social: {email: "your@email.com"}}})),
+          axios.get(`${API}/api/content`).catch(() => ({data: {social: {email: "your@email.com"}}})) ,
           axios.get(`${API}/api/projects`).catch(() => ({data: []}))
         ])
         setContent(contentRes.data || {social: {email: "your@email.com"}})
@@ -36,7 +36,7 @@ function Portfolio() {
     fetchData()
   }, [])
 
-  // OBSERVERS - Fade in on scroll + Active Nav
+  // OBSERVERS - Smooth fade in on scroll + Active Nav
   useEffect(() => {
     if (loading) return
 
@@ -44,17 +44,25 @@ function Portfolio() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('show')
+            // add delay for stagger effect
+            const delay = entry.target.dataset.delay || 0
+            setTimeout(() => {
+              entry.target.classList.add('show')
+            }, delay)
             observerRef.current.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.2 }
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" } // triggers 100px earlier for smoother feel
     )
 
     const observeElements = () => {
-      document.querySelectorAll('section, .project-card, .contact-form, .about').forEach((el) => {
+      document.querySelectorAll('section, .project-card, .contact-form, .about').forEach((el, i) => {
         if (!el.classList.contains('show')) {
+          // stagger project cards
+          if (el.classList.contains('project-card')) {
+            el.dataset.delay = i * 100 // 100ms stagger
+          }
           observerRef.current.observe(el)
         }
       })
@@ -109,19 +117,17 @@ function Portfolio() {
     <>
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
       <NickiiedPortfolio content={content} projects={projects} />
-      <ChatWidget content={content} /> {/* PASS CONTENT HERE SO EMAIL DOESN'T CRASH */}
+      <ChatWidget content={content} />
     </>
   )
 }
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route path="/admin" element={<Admin />} />
+    </Routes>
   )
 }
 

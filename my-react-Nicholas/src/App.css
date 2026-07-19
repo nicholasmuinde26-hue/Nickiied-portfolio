@@ -19,7 +19,7 @@
   --text: #ffffff;
   --text-2: #bbb;
   --text-3: rgba(255,255,255,0.7);
-  --text-4: hsl(356, 85%, 92%);
+  
   
   --border: rgba(255, 255, 255, 0.1);
   --border-accent: rgba(124,240,61,0.15);
@@ -60,6 +60,67 @@ body{
   margin: 0; 
   transition: background 0.4s ease, color 0.4s ease;
 }
+
+
+
+/* === SMOOTH POP IN ANIMATION === */
+
+/* Base state - hidden */
+section, .project-card, .contact-form, .about {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96); /* less distance = smoother */
+  filter: blur(3px); /* less blur = cleaner pop */
+  transition: 
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+/* When visible */
+section.show, .project-card.show, .contact-form.show, .about.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger for project cards - cascade effect */
+.projects-grid .project-card:nth-child(1) { transition-delay: 0.05s; }
+.projects-grid .project-card:nth-child(2) { transition-delay: 0.1s; }
+.projects-grid .project-card:nth-child(3) { transition-delay: 0.15s; }
+.projects-grid .project-card:nth-child(4) { transition-delay: 0.2s; }
+.projects-grid .project-card:nth-child(5) { transition-delay: 0.25s; }
+.projects-grid .project-card:nth-child(6) { transition-delay: 0.3s; }
+
+/* Stagger for sections */
+section:nth-of-type(1) { transition-delay: 0.05s; }
+section:nth-of-type(2) { transition-delay: 0.1s; }
+section:nth-of-type(3) { transition-delay: 0.15s; }
+section:nth-of-type(4) { transition-delay: 0.2s; }
+
+/* Optional: hover lift for cards */
+.project-card {
+  transition: 
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+    box-shadow 0.4s ease,
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(124, 240, 61, 0.18);
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  section, .project-card, .contact-form, .about {
+    transition: none;
+    transform: none;
+    filter: none;
+  }
+}
+
+
+
 
 /* ========== SCROLL PROGRESS + BASE ========== */
 .scroll-progress {
@@ -173,10 +234,10 @@ body{
 /* MOBILE MENU */
 .mobile-menu {
   position: fixed;
-  top: 90px;
+  top: 92px;
   left: 50%;
   transform: translateX(-50%) scale(0.95);
-  width: 94%;
+  width: 90%;
   max-width: 400px;
   background: var(--bg-card-2);
   backdrop-filter: blur(20px);
@@ -199,7 +260,7 @@ body{
   align-items: center;
   margin-bottom: 20px;
 }
-.mobile-menu-header img { height: 30px; }
+.mobile-menu-header img { height: 30px; border-radius: 16px; }
 .mobile-menu-header button {
   background: var(--bg-card);
   border: none;

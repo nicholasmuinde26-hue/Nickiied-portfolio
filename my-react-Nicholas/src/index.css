@@ -119,3 +119,33 @@
   .service-card { padding: 24px 20px; }
   .section-title { font-size: 1.9rem; }
 }
+
+/* Base state - hidden */
+section, .project-card, .contact-form, .about {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  filter: blur(6px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
+}
+
+/* When visible */
+section.show, .project-card.show, .contact-form.show, .about.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger for project cards so they cascade */
+.project-card:nth-child(1) { transition-delay: 0.1s; }
+.project-card:nth-child(2) { transition-delay: 0.2s; }
+.project-card:nth-child(3) { transition-delay: 0.3s; }
+.project-card:nth-child(4) { transition-delay: 0.4s; }
+.project-card:nth-child(5) { transition-delay: 0.5s; }
+.project-card:nth-child(6) { transition-delay: 0.6s; }
+
+section:nth-of-type(1) { transition-delay: 0.1s; }
+section:nth-of-type(2) { transition-delay: 0.2s; }
+section:nth-of-type(3) { transition-delay: 0.3s; }
