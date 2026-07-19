@@ -1,7 +1,7 @@
 [build]
   base = "my-react-Nicholas"
   command = "npm run build"
-  publish = "my-react-Nicholas/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
