@@ -1,5 +1,5 @@
 {
-  "name": "my-updated-portfolio-website",
+  "name": "nickiied-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -16,5 +16,13 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "vite": "^5.3.1"
+  },
+  "homepage": "https://github.com/nicholasmuinde26-hue/Nickiied-portfolio#readme",
+  "bugs": {
+    "url": "https://github.com/nicholasmuinde26-hue/Nickiied-portfolio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicholasmuinde26-hue/Nickiied-portfolio.git"
   }
 }
