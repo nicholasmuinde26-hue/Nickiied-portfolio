@@ -1,6 +1,6 @@
 import express from "express";
 import nodemailer from "nodemailer";
-import Contact from "../models/Contact.js"; // <-- import model
+import Contact from "../models/Contact.js";
 
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
 
     // 1. Save to MongoDB first
     const newContact = await Contact.create({ name, email, phone, subject, message });
+    console.log("Contact saved to DB:", newContact._id); // <- helps debug in Render logs
 
     // 2. Send email to yourself - with error catch so DB still saves if email fails
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -20,12 +21,15 @@ router.post("/", async (req, res) => {
           service: "gmail",
           auth: { 
             user: process.env.EMAIL_USER, 
-            pass: process.env.EMAIL_PASS // this must be App Password
+            pass: process.env.EMAIL_PASS // this must be 16-char App Password, no spaces
           }
         });
+        
+        await transporter.verify(); // <- ADD THIS: tests connection before sending
+
         await transporter.sendMail({
-          from: `"${name}" <${process.env.EMAIL_USER}>`, // use your gmail as from
-          replyTo: email, // so you can hit reply
+          from: `"${name} via Portfolio" <${process.env.EMAIL_USER}>`, // Gmail requires your gmail here
+          replyTo: email, // so you can hit reply and it goes to them
           to: process.env.EMAIL_USER,
           subject: subject || "New Portfolio Message",
           html: `
@@ -37,15 +41,19 @@ router.post("/", async (req, res) => {
             <p><b>Message:</b> ${message}</p>
           `
         });
+        console.log("Email sent successfully to:", process.env.EMAIL_USER);
       } catch(emailErr) {
         console.error("Email failed but contact saved:", emailErr.message);
+        // Don't return error to user. We already saved to DB
       }
+    } else {
+      console.warn("EMAIL_USER or EMAIL_PASS not set. Skipping email.");
     }
 
     res.status(200).json({ msg: "Message sent successfully ✅", data: newContact });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Failed to send message" });
+    console.error("Contact route error:", err);
+    res.status(500).json({ msg: "Failed to save message" });
   }
 });
 
