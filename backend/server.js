@@ -7,8 +7,8 @@ import { fileURLToPath } from "url";
 import helmet from "helmet";
 import morgan from "morgan";
 import fs from "fs";
-import bcrypt from "bcrypt"; // ADDED
-import rateLimit from "express-rate-limit"; // ADDED
+import bcrypt from "bcrypt"; 
+import rateLimit from "express-rate-limit"; 
 
 dotenv.config();
 console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
@@ -21,6 +21,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import Admin from "./models/Admin.js";
 
 const app = express();
+app.set('trust proxy', 1); // <- Trust Render's proxy. This is all we need for v7
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -51,14 +52,19 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // IMPORTANT: Make uploads public so Netlify can load images
 app.use("/uploads", express.static(uploadDir));
 
-// Rate limiter for contact form
-const contactLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: "Too many requests, try again later" });
+// Rate limiter for contact form - FIXED for v7
+const contactLimiter = rateLimit({ 
+  windowMs: 15 * 60 * 1000, 
+  max: 5, 
+  message: "Too many requests, try again later"
+  // trustProxy removed
+});
 
-// Routes - moved outside so they load even if mongo is slow
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/projects", projectRoutes);
-app.use("/api/contact", contactLimiter, contactRoutes); // added limiter here
+app.use("/api/contact", contactLimiter, contactRoutes); 
 app.use("/api/upload", uploadRoutes);
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
