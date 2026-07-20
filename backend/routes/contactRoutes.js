@@ -1,8 +1,13 @@
 import express from "express";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import Contact from "../models/Contact.js";
+import dotenv from "dotenv"; // <- ADD
+dotenv.config(); // <- ADD
 
 const router = express.Router();
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+console.log("RESEND KEY LOADED:", !!process.env.RESEND_API_KEY); // <- for debugging
 
 router.post("/", async (req, res) => {
   try {
@@ -12,25 +17,15 @@ router.post("/", async (req, res) => {
 
     // 1. Save to MongoDB first
     const newContact = await Contact.create({ name, email, phone, subject, message });
-    console.log("Contact saved to DB:", newContact._id); // <- helps debug in Render logs
+    console.log("Contact saved to DB:", newContact._id);
 
-    // 2. Send email to yourself - with error catch so DB still saves if email fails
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    // 2. Send email via Resend
+    if (process.env.RESEND_API_KEY) {
       try {
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: { 
-            user: process.env.EMAIL_USER, 
-            pass: process.env.EMAIL_PASS // this must be 16-char App Password, no spaces
-          }
-        });
-        
-        await transporter.verify(); // <- ADD THIS: tests connection before sending
-
-        await transporter.sendMail({
-          from: `"${name} via Portfolio" <${process.env.EMAIL_USER}>`, // Gmail requires your gmail here
-          replyTo: email, // so you can hit reply and it goes to them
-          to: process.env.EMAIL_USER,
+        const data = await resend.emails.send({
+          from: "Portfolio <onboarding@resend.dev>",
+          to: process.env.EMAIL_USER, // send to yourself
+          reply_to: email,
           subject: subject || "New Portfolio Message",
           html: `
             <h3>New Contact Form Submission</h3>
@@ -41,13 +36,12 @@ router.post("/", async (req, res) => {
             <p><b>Message:</b> ${message}</p>
           `
         });
-        console.log("Email sent successfully to:", process.env.EMAIL_USER);
+        console.log("Email sent successfully via Resend:", data.id);
       } catch(emailErr) {
         console.error("Email failed but contact saved:", emailErr.message);
-        // Don't return error to user. We already saved to DB
       }
     } else {
-      console.warn("EMAIL_USER or EMAIL_PASS not set. Skipping email.");
+      console.error("RESEND_API_KEY is missing in env");
     }
 
     res.status(200).json({ msg: "Message sent successfully ✅", data: newContact });
