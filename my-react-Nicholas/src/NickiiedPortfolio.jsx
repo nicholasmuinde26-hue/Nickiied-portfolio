@@ -28,6 +28,10 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
     },
     about: {
       title: contentFromProps?.about?.title || "About Me",
+      subtitle: contentFromProps?.about?.subtitle || "", // ADDED
+      description: contentFromProps?.about?.description || "", // ADDED
+      skills: contentFromProps?.about?.skills || [], // ADDED
+      tools: contentFromProps?.about?.tools || [], // ADDED
       aboutPhoto: contentFromProps?.about?.aboutPhoto || ENV.VITE_ABOUT_PHOTO,
       cvLink: contentFromProps?.about?.cvLink || ENV.VITE_CV_LINK || "#"
     },
@@ -37,6 +41,11 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
       linkedin: contentFromProps?.social?.linkedin || ENV.VITE_LINKEDIN,
       tiktok: contentFromProps?.social?.tiktok || ENV.VITE_TIKTOK,
       email: contentFromProps?.social?.email || ENV.VITE_EMAIL
+    },
+    services: contentFromProps?.services || [], // ADDED THIS
+    experience: { // ADDED THIS
+      stats: contentFromProps?.experience?.stats || [],
+      items: contentFromProps?.experience?.items || []
     }
   };
 
@@ -82,11 +91,11 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
       <Navbar content={content} />
       <Hero content={content} />
       <About content={content} />
-      <ProfessionalExperience />
+      <ProfessionalExperience content={content} /> {/* FIXED: pass content */}
       <Projects projects={projects} loading={loading} />
       <Services content={content} />
       <Contact 
-        content={content} // <-- ADDED THIS
+        content={content}
         formData={formData} 
         setFormData={setFormData} 
         handleSubmit={handleSubmit} 
@@ -96,8 +105,5 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
     </>
   );
 }
-
-
-
 
 export default NickiiedPortfolio;

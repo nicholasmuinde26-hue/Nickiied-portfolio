@@ -1,7 +1,5 @@
 import { FaCode, FaMobileAlt, FaPaintBrush, FaRocket, FaCheck } from 'react-icons/fa';
 
-
-
 function Services({ content }) {
   const services = [
     {
@@ -57,12 +55,14 @@ function Services({ content }) {
   return (
     <section id="services" className="services">
       <div className="container">
-        <h2 className="section-title">Services I Offer</h2>
-        <p className="section-subtitle">Custom solutions tailored to your goals. No templates, no fluff.</p>
+        <div className="reveal" data-delay="1">
+          <h2 className="section-title">Services I Offer</h2>
+          <p className="section-subtitle">Custom solutions tailored to your goals. No templates, no fluff.</p>
+        </div>
         
         <div className="services-grid">
           {services.map((service, i) => (
-            <div key={i} className="service-card">
+            <div key={i} className="service-card reveal" data-delay={i+2}>
               {service.tag && <span className="service-tag">{service.tag}</span>}
               <div className="service-icon">{service.icon}</div>
               <h3>{service.title}</h3>
@@ -70,7 +70,7 @@ function Services({ content }) {
               
               <ul className="service-features">
                 {service.features.map((f, j) => (
-                  <li key={j}><FaCheck /> {f}</li>
+                  <li key={j} className="reveal" data-delay={j+6}><FaCheck /> {f}</li>
                 ))}
               </ul>
 

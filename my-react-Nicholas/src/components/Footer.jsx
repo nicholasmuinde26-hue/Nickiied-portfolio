@@ -15,7 +15,7 @@ const Footer = ({ content }) => {
         <div className="container">
           <div className="footer-grid">
             {/* COL 1: BRAND + STATS */}
-            <div className="footer-col brand-col">
+            <div className="footer-col brand-col reveal" data-delay="1">
               <div className="footer-logo">
                 <FaCode /> <span>{content.hero.name}</span>
               </div>
@@ -25,7 +25,7 @@ const Footer = ({ content }) => {
               </p>
               <div className="footer-stats">
                 {stats.map((s, i) => (
-                  <div key={i} className="stat-item">
+                  <div key={i} className="stat-item reveal" data-delay={i+2}>
                     <h4>{s.number}</h4>
                     <p>{s.label}</p>
                   </div>
@@ -34,7 +34,7 @@ const Footer = ({ content }) => {
             </div>
 
             {/* COL 2: QUICK LINKS */}
-            <div className="footer-col">
+            <div className="footer-col reveal" data-delay="4">
               <h4>Navigation</h4>
               <ul>
                 <li><a href="#home">Home</a></li>
@@ -46,7 +46,7 @@ const Footer = ({ content }) => {
             </div>
 
             {/* COL 3: CONTACT INFO */}
-            <div className="footer-col">
+            <div className="footer-col reveal" data-delay="5">
               <h4>Get In Touch</h4>
               <ul className="contact-list">
                 <li>
@@ -68,7 +68,7 @@ const Footer = ({ content }) => {
         </div>
       </div>
 
-      <div className="footer-bottom">
+      <div className="footer-bottom reveal" data-delay="6">
         <div className="container">
           <p>© {currentYear} {content.hero.name}. All rights reserved. | Designed & Built with ❤️</p>
         </div>

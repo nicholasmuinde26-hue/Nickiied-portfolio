@@ -4,7 +4,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
   return (
     <section className="contact" id="contact">
       <div className="container">
-        <div className="contact-header">
+        <div className="contact-header reveal" data-delay="1">
           <p className="section-tag">GET IN TOUCH</p>
           <h2 className="heading">Let's <span>Work Together</span></h2>
           <p className="subheading">
@@ -16,7 +16,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
         <div className="contact-wrapper">
           {/* 1. INFO CARDS */}
           <div className="contact-info">
-            <div className="info-card glass">
+            <div className="info-card glass reveal" data-delay="2">
               <div className="info-icon" style={{background: 'rgba(0, 212, 255, 0.1)', color: '#00d4ff'}}>
                 <FaEnvelope />
               </div>
@@ -27,7 +27,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
               </div>
             </div>
 
-            <div className="info-card glass">
+            <div className="info-card glass reveal" data-delay="3">
               <div className="info-icon" style={{background: 'rgba(124, 240, 61, 0.1)', color: '#7cf03d'}}>
                 <FaPhoneAlt />
               </div>
@@ -38,7 +38,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
               </div>
             </div>
 
-            <div className="info-card glass">
+            <div className="info-card glass reveal" data-delay="4">
               <div className="info-icon" style={{background: 'rgba(255, 167, 38, 0.1)', color: '#ffa726'}}>
                 <FaMapMarkerAlt />
               </div>
@@ -51,7 +51,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
           </div>
 
           {/* 2. GUARANTEE + SOCIALS MERGED */}
-          <div className="guarantee-box glass">
+          <div className="guarantee-box glass reveal" data-delay="5">
             <div className="guarantee-content">
               <FaCheckCircle className="guarantee-icon" />
               <div>
@@ -73,7 +73,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
           </div>
 
           {/* 3. CONTACT FORM */}
-          <form className="contact-form glass" onSubmit={handleSubmit}>
+          <form className="contact-form glass reveal" data-delay="6" onSubmit={handleSubmit}>
             <div className="form-header">
               <FaPaperPlane />
               <h3>Send Message</h3>
@@ -95,7 +95,7 @@ const Contact = ({ formData, setFormData, handleSubmit, status, content }) => {
           </form>
 
           {/* 4. WHAT HAPPENS NEXT */}
-          <div className="what-next-box">
+          <div className="what-next-box reveal" data-delay="7">
             <h4>What happens next?</h4>
             <p>
               I'll review your project details and respond within 24 hours with questions, 

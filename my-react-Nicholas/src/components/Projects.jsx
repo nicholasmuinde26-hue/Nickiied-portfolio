@@ -1,22 +1,11 @@
-import { useEffect } from "react";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 
 const Projects = ({ projects, loading }) => {
 
-  useEffect(() => {
-    const cards = document.querySelectorAll('.project-card');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) entry.target.classList.add('show');
-      })
-    }, {threshold: 0.1});
-    cards.forEach(card => obs.observe(card));
-  }, [projects, loading])
-
   return (
     <section className="projects" id="projects">
       <div className="container">
-        <div className="projects-header">
+        <div className="projects-header reveal" data-delay="1">
           <p className="section-tag">MY WORK</p>
           <h2 className="heading">Featured <span>Projects</span></h2>
           <p className="subheading">A collection of fullstack apps and security labs I've built</p>
@@ -25,7 +14,7 @@ const Projects = ({ projects, loading }) => {
         <div className="projects-grid">
           {loading ? (
             [...Array(3)].map((_, i) => (
-              <div className="project-card skeleton" key={i}>
+              <div className="project-card glass skeleton reveal" data-delay={i+2} key={i}>
                 <div className="project-img skeleton-bg"></div>
                 <div className="project-content">
                   <div className="skeleton-line skeleton-title"></div>
@@ -35,13 +24,13 @@ const Projects = ({ projects, loading }) => {
               </div>
             ))
           ) : (projects?.length === 0) ? (
-            <div className="no-projects glass">
+            <div className="no-projects glass reveal" data-delay="2">
               <h3>No Projects Yet</h3>
               <p>Add your first project in the /admin dashboard</p>
             </div>
           ) : (
             projects.slice().sort((a, b) => (a.order || 0) - (b.order || 0)).map((p, index) => (
-              <div className="project-card glass" key={p._id || index} style={{ '--delay': `${index * 0.15}s` }}>
+              <div className="project-card glass reveal" data-delay={index+2} key={p._id || index}>
                 <div className="project-img">
                   <img src={p.image} alt={p.title} />
                   <div className="img-overlay"></div>
@@ -50,7 +39,7 @@ const Projects = ({ projects, loading }) => {
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
                   <div className="tech-stack">
-                    {p.tech?.map((t) => <span key={t} className="badge">{t}</span>)}
+                    {p.tech?.map((t, j) => <span key={t} className="badge reveal" data-delay={j+10}>{t}</span>)}
                   </div>
                   <div className="project-links">
                     {p.link && 

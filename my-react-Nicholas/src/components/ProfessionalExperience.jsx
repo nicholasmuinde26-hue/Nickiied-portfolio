@@ -37,16 +37,16 @@ const ProfessionalExperience = () => {
   return (
     <section className="experience-v2" id="experience">
       <div className="container">
-        <div className="experience-header">
+        <div className="experience-header reveal" data-delay="1">
           <p className="section-tag">PROFESSIONAL EXPERIENCE</p>
           <h2 className="heading">My <span>Journey</span></h2>
-          <p className="subheading">A journey of continuous growth, from MERN development to cybersecurity specialization</p>
+          <p className="section-subtitle">A journey of continuous growth, from MERN development to cybersecurity specialization</p>
         </div>
 
-        {/* STATS CARD */}
+        {/* STATS CARD - stagger 2 to 5 */}
         <div className="stats-grid">
           {stats.map((stat, i) => (
-            <div className="stat-card glass" key={i} style={{'--delay': `${i*0.1}s`}}>
+            <div className="stat-card glass reveal" data-delay={i+2} key={i}>
               <div className="stat-icon" style={{color: stat.color}}>
                 {stat.icon}
               </div>
@@ -56,10 +56,10 @@ const ProfessionalExperience = () => {
           ))}
         </div>
 
-        {/* TIMELINE */}
+        {/* TIMELINE - stagger 6 to 8 */}
         <div className="timeline">
           {experiences.map((exp, i) => (
-            <div className="timeline-item" key={i}>
+            <div className="timeline-item reveal" data-delay={i+6} key={i}>
               <div className="timeline-dot"></div>
               <div className="timeline-content glass">
                 <span className="timeline-year">{exp.year}</span>
@@ -67,7 +67,9 @@ const ProfessionalExperience = () => {
                 <h4>{exp.company}</h4>
                 <p>{exp.description}</p>
                 <div className="timeline-tags">
-                  {exp.tags.map((tag, j) => <span key={j} className="badge">{tag}</span>)}
+                  {exp.tags.map((tag, j) => (
+                    <span key={j} className="badge reveal" data-delay={j+10}>{tag}</span>
+                  ))}
                 </div>
               </div>
             </div>

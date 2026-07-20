@@ -6,9 +6,12 @@ const Navbar = ({ content }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [active, setActive] = useState('home');
   const { theme, toggleTheme } = useContext(ThemeContext);
   const email = "Nicholasmuinde26@gmail.com";
+
+  const nav = {
+    logo: content?.nav?.logo || import.meta.env.VITE_LOGO || "/logo.png"
+  }
 
   const navLinks = [
     { id: 'home', label: 'Home' },
@@ -20,50 +23,42 @@ const Navbar = ({ content }) => {
   ]
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-      const sections = navLinks.map(l => l.id);
-      for (let sec of sections) {
-        const el = document.getElementById(sec);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) setActive(sec);
-        }
-      }
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleLinkClick = (id) => {
     setIsOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setActive(id);
+    const el = document.getElementById(id);
+    if(el) {
+      const yOffset = -80;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   }
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch(err) { console.error("Copy failed", err) }
   }
 
   return (
     <>
       <nav className={`nav-bar ${scrolled? 'scrolled' : ''}`}>
-        <div className="nav-logo">
-          <a href="#home" onClick={() => handleLinkClick('home')}>
-            <img src={content.nav.logo} alt="NickSpark" />
+        <div className="nav-logo reveal" data-delay="1">
+          <a href="#home" onClick={(e) => { e.preventDefault(); handleLinkClick('home'); }}>
+            <img src={nav.logo} alt="NickSpark" />
           </a>
         </div>
 
         <ul className="nav-links">
-          {navLinks.map(link => (
-            <li key={link.id}>
-              <a
-                href={`#${link.id}`}
-                className={active === link.id? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); handleLinkClick(link.id); }}
-              >
+          {navLinks.map((link, i) => (
+            <li key={link.id} className="reveal" data-delay={i+2}>
+              <a href={`#${link.id}`} onClick={(e) => { e.preventDefault(); handleLinkClick(link.id); }}>
                 {link.label}
               </a>
             </li>
@@ -71,34 +66,34 @@ const Navbar = ({ content }) => {
         </ul>
 
         <div className="nav-right">
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+          <button className="theme-toggle reveal" data-delay="8" onClick={toggleTheme} aria-label="Toggle theme">
             {theme === 'dark'? <FaSun /> : <FaMoon />}
           </button>
-          <div className="nav-email" onClick={copyEmail}>
-            {copied? <><FaCheck /> Copied</> : email}
+          <div className="nav-email reveal" data-delay="9" onClick={copyEmail}>
+            {copied? <><FaCheck /> Copied</> : <><FaCopy /> {email}</>}
           </div>
         </div>
 
-        <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+        <button className="hamburger reveal" data-delay="10" onClick={() => setIsOpen(!isOpen)}>
           <span></span><span></span><span></span>
         </button>
       </nav>
 
       <div className={`mobile-menu ${isOpen? 'open' : ''}`}>
         <div className="mobile-menu-header">
-          <img src={content.nav.logo} alt="NickSpark" />
+          <img src={nav.logo} alt="NickSpark" />
           <button onClick={() => setIsOpen(false)}><FaTimes /></button>
         </div>
         <div className="mobile-links">
-          {navLinks.map(link => (
-            <a key={link.id} href={`#${link.id}`} onClick={() => handleLinkClick(link.id)}>{link.label}</a>
+          {navLinks.map((link, i) => (
+            <a key={link.id} className="reveal" data-delay={i+1} href={`#${link.id}`} onClick={(e) => { e.preventDefault(); handleLinkClick(link.id); }}>{link.label}</a>
           ))}
         </div>
-        <button className="theme-toggle-mobile" onClick={toggleTheme}>
+        <button className="theme-toggle-mobile reveal" data-delay="8" onClick={toggleTheme}>
           {theme === 'dark'? <FaSun /> : <FaMoon />} {theme === 'dark'? 'Light Mode' : 'Dark Mode'}
         </button>
-        <div className="mobile-email" onClick={copyEmail}>
-          {copied? <><FaCheck /> Copied!</> : email}
+        <div className="mobile-email reveal" data-delay="9" onClick={copyEmail}>
+          {copied? <><FaCheck /> Copied!</> : <><FaCopy /> Copy Email</>}
         </div>
       </div>
       {isOpen && <div className="overlay" onClick={() => setIsOpen(false)}></div>}

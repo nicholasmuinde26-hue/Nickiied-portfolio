@@ -14,7 +14,7 @@ function Portfolio() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const observerRef = useRef(null)
-  const mutationRef = useRef(null)
+  const navObserverRef = useRef(null)
 
   // FETCH DATA
   useEffect(() => {
@@ -36,43 +36,37 @@ function Portfolio() {
     fetchData()
   }, [])
 
-  // OBSERVERS - Smooth fade in on scroll + Active Nav
+  // OBSERVERS - Smooth reveal on scroll + Active Nav
   useEffect(() => {
     if (loading) return
 
+    // 1. REVEAL OBSERVER
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // add delay for stagger effect
-            const delay = entry.target.dataset.delay || 0
+            const delay = parseInt(entry.target.dataset.delay) || 0
             setTimeout(() => {
               entry.target.classList.add('show')
-            }, delay)
+            }, delay * 100) // data-delay="3" = 300ms
             observerRef.current.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" } // triggers 100px earlier for smoother feel
+      { threshold: 0.1, rootMargin: "0px 0px -80px 0px" } // triggers 80px before element hits bottom
     )
 
-    const observeElements = () => {
-      document.querySelectorAll('section, .project-card, .contact-form, .about').forEach((el, i) => {
+    const observeAll = () => {
+      document.querySelectorAll('.reveal').forEach((el) => {
         if (!el.classList.contains('show')) {
-          // stagger project cards
-          if (el.classList.contains('project-card')) {
-            el.dataset.delay = i * 100 // 100ms stagger
-          }
           observerRef.current.observe(el)
         }
       })
     }
+    observeAll()
 
-    observeElements()
-    mutationRef.current = new MutationObserver(observeElements)
-    mutationRef.current.observe(document.body, { childList: true, subtree: true })
-
-    const navObserver = new IntersectionObserver(
+    // 2. ACTIVE NAV OBSERVER
+    navObserverRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -85,18 +79,17 @@ function Portfolio() {
           }
         })
       },
-      { rootMargin: '-90px 0px -55% 0px', threshold: 0.1 }
+      { rootMargin: '-90px 0px -55% 0px', threshold: 0.1 } // -90px = navbar height
     )
-    document.querySelectorAll('section').forEach(s => navObserver.observe(s))
+    document.querySelectorAll('section[id]').forEach(s => navObserverRef.current.observe(s))
 
     return () => {
       observerRef.current?.disconnect()
-      mutationRef.current?.disconnect()
-      navObserver.disconnect()
+      navObserverRef.current?.disconnect()
     }
-  }, [loading])
+  }, [loading, content, projects]) // re-run when projects load so new cards get observed
 
-  // SCROLL PROGRESS
+  // SCROLL PROGRESS BAR
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY
@@ -108,15 +101,15 @@ function Portfolio() {
   }, [])
 
   if (loading) return (
-    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0a0a0a'}}>
-      <h2 style={{color:'#7cf03d'}}>Loading Portfolio<span className="dots">...</span></h2>
+    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg)'}}>
+      <h2 style={{color:'var(--accent)'}}>Loading Portfolio<span className="dots">...</span></h2>
     </div>
   )
 
   return (
     <>
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
-      <NickiiedPortfolio content={content} projects={projects} />
+      <NickiiedPortfolio content={content} projects={projects} loading={loading} />
       <ChatWidget content={content} />
     </>
   )
