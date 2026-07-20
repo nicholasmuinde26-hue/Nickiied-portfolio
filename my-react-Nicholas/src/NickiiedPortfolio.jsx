@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -8,11 +8,12 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Services from './components/Services'
 
-function NickiiedPortfolio({ content: contentFromProps, projects: initialProjects }) {
+function NickiiedPortfolio({ content: contentFromProps, projects: initialProjects, loading: loadingFromProps }) {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [status, setStatus] = useState('');
-  const [projects, setProjects] = useState(initialProjects || []);
-  const [loading, setLoading] = useState(!initialProjects);
+  // Use props directly. Don't fetch again here
+  const projects = initialProjects || [];
+  const loading = loadingFromProps;
 
   const API_URL = import.meta.env.VITE_API_URL || '';
   const ENV = import.meta.env;
@@ -28,10 +29,10 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
     },
     about: {
       title: contentFromProps?.about?.title || "About Me",
-      subtitle: contentFromProps?.about?.subtitle || "", // ADDED
-      description: contentFromProps?.about?.description || "", // ADDED
-      skills: contentFromProps?.about?.skills || [], // ADDED
-      tools: contentFromProps?.about?.tools || [], // ADDED
+      subtitle: contentFromProps?.about?.subtitle || "",
+      description: contentFromProps?.about?.description || "",
+      skills: contentFromProps?.about?.skills || [],
+      tools: contentFromProps?.about?.tools || [],
       aboutPhoto: contentFromProps?.about?.aboutPhoto || ENV.VITE_ABOUT_PHOTO,
       cvLink: contentFromProps?.about?.cvLink || ENV.VITE_CV_LINK || "#"
     },
@@ -42,31 +43,15 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
       tiktok: contentFromProps?.social?.tiktok || ENV.VITE_TIKTOK,
       email: contentFromProps?.social?.email || ENV.VITE_EMAIL
     },
-    services: contentFromProps?.services || [], // ADDED THIS
-    experience: { // ADDED THIS
+    services: contentFromProps?.services || [],
+    experience: {
       stats: contentFromProps?.experience?.stats || [],
       items: contentFromProps?.experience?.items || []
     }
   };
 
-  useEffect(() => {
-    if (initialProjects) return;
-    const loadProjects = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`${API_URL}/api/projects`);
-        if(!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setProjects(Array.isArray(data)? data : []);
-      } catch (err) { 
-        console.error(err);
-        setStatus('Could not load projects') 
-      } finally { 
-        setLoading(false) 
-      }
-    };
-    loadProjects();
-  }, [API_URL, initialProjects]);
+  // REMOVED: useEffect that fetches projects again
+  // We get everything from App.jsx now
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,7 +76,7 @@ function NickiiedPortfolio({ content: contentFromProps, projects: initialProject
       <Navbar content={content} />
       <Hero content={content} />
       <About content={content} />
-      <ProfessionalExperience content={content} /> {/* FIXED: pass content */}
+      <ProfessionalExperience content={content} />
       <Projects projects={projects} loading={loading} />
       <Services content={content} />
       <Contact 
