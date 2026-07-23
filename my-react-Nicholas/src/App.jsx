@@ -7,28 +7,59 @@ import ChatWidget from './ChatWidget'
 import axios from 'axios'
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:4000"
+const CACHE_KEY = 'portfolio_cache'
+const CACHE_TIME = 5 * 60 * 1000 // 5 minutes
 
 function Portfolio() {
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [content, setContent] = useState(null)
+  // Start with default data so UI renders immediately
+  const [content, setContent] = useState({social: {email: "your@email.com"}})
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const observerRef = useRef(null)
   const navObserverRef = useRef(null)
+  const cacheRef = useRef(null)
 
-  // FETCH DATA
+  // FETCH DATA + CACHE
   useEffect(() => {
     const fetchData = async () => {
+      // 1. Check cache first
+      const cached = localStorage.getItem(CACHE_KEY)
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached)
+        if (Date.now() - timestamp < CACHE_TIME) {
+          setContent(data.content)
+          setProjects(data.projects)
+          setLoading(false)
+          cacheRef.current = data
+          return // instant load
+        }
+      }
+
+      // 2. Fetch from API if no cache
       try {
         const [contentRes, projectsRes] = await Promise.all([
-          axios.get(`${API}/api/content`).catch(() => ({data: {social: {email: "your@email.com"}}})) ,
-          axios.get(`${API}/api/projects`).catch(() => ({data: []}))
+          axios.get(`${API}/api/content`),
+          axios.get(`${API}/api/projects`)
         ])
-        setContent(contentRes.data || {social: {email: "your@email.com"}})
-        setProjects(projectsRes.data || [])
+        
+        const newData = {
+          content: contentRes.data,
+          projects: projectsRes.data
+        }
+        
+        setContent(newData.content)
+        setProjects(newData.projects)
+        cacheRef.current = newData
+        
+        // Save to cache
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          data: newData,
+          timestamp: Date.now()
+        }))
+        
       } catch (err) {
         console.error("Failed to fetch data", err)
-        setContent({social: {email: "your@email.com"}})
       } finally {
         setLoading(false)
       }
@@ -38,56 +69,55 @@ function Portfolio() {
 
   // OBSERVERS - Smooth reveal on scroll + Active Nav
   useEffect(() => {
-    if (loading) return
+    // Don't wait for loading anymore. Observe as soon as DOM exists
+    const timer = setTimeout(() => {
+      // 1. REVEAL OBSERVER
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const delay = parseInt(entry.target.dataset.delay) || 0
+              setTimeout(() => {
+                entry.target.classList.add('show')
+              }, delay * 40)
+              observerRef.current.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -80px 0px" }
+      )
 
-    // 1. REVEAL OBSERVER
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const delay = parseInt(entry.target.dataset.delay) || 0
-            setTimeout(() => {
-              entry.target.classList.add('show')
-            }, delay * 100) // data-delay="3" = 300ms
-            observerRef.current.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -80px 0px" } // triggers 80px before element hits bottom
-    )
-
-    const observeAll = () => {
       document.querySelectorAll('.reveal').forEach((el) => {
         if (!el.classList.contains('show')) {
           observerRef.current.observe(el)
         }
       })
-    }
-    observeAll()
 
-    // 2. ACTIVE NAV OBSERVER
-    navObserverRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            document.querySelectorAll('.nav-links a').forEach(link => {
-              link.classList.remove('active')
-              if (link.getAttribute('href') === `#${entry.target.id}`) {
-                link.classList.add('active')
-              }
-            })
-          }
-        })
-      },
-      { rootMargin: '-90px 0px -55% 0px', threshold: 0.1 } // -90px = navbar height
-    )
-    document.querySelectorAll('section[id]').forEach(s => navObserverRef.current.observe(s))
+      // 2. ACTIVE NAV OBSERVER
+      navObserverRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active')
+                if (link.getAttribute('href') === `#${entry.target.id}`) {
+                  link.classList.add('active')
+                }
+              })
+            }
+          })
+        },
+        { rootMargin: '-90px 0px -55% 0px', threshold: 0.1 }
+      )
+      document.querySelectorAll('section[id]').forEach(s => navObserverRef.current.observe(s))
+    }, 80)
 
     return () => {
+      clearTimeout(timer)
       observerRef.current?.disconnect()
       navObserverRef.current?.disconnect()
     }
-  }, [loading, content, projects]) // re-run when projects load so new cards get observed
+  }, [content, projects]) // re-run when data loads
 
   // SCROLL PROGRESS BAR
   useEffect(() => {
@@ -100,12 +130,7 @@ function Portfolio() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (loading) return (
-    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg)'}}>
-      <h2 style={{color:'var(--accent)'}}>Loading Portfolio<span className="dots">...</span></h2>
-    </div>
-  )
-
+  // Removed full-screen loading. Now loading is handled inside NickiiedPortfolio
   return (
     <>
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
